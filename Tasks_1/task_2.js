@@ -1,27 +1,28 @@
-function start(num) {
+function start(num = 0) {
   let incrementor = 2;
   let previousNum;
-  let flag;
+  let result;
 
   return function () {
-    previousNum = num;
-
-    if (previousNum % 5 === 0 && flag) {
-      flag = false;
+    if (previousNum % 5 === 0 && previousNum !== 0) {
       incrementor = 3;
-      return previousNum / 5;
-    } else if (previousNum % 7 === 0 && flag) {
-      flag = false;
+      result = previousNum / 5;
+      previousNum = 0;
+      return result;
+    } else if (previousNum % 7 === 0 && previousNum !== 0) {
       incrementor = 1;
-      return previousNum - 7;
+      result = previousNum - 7;
+      previousNum = 0;
+      return result;
     }
 
-    flag = true;
-    return (num += incrementor);
+    num += incrementor;
+    previousNum = num;
+    return num;
   };
 }
 
-const generator = start(0);
+const generator = start(1);
 
 console.log(generator());
 console.log(generator());

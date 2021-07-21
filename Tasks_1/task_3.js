@@ -4,8 +4,6 @@ function crasher(a) {
 
 const a = { bla: "bla" };
 
-crasher({ bla: "хммм..." }, a);
-crasher.bind(null, a); // но это вроде как не вызов функции, это вызов метода...
-crasher.call(null, { bla: "bla" }, a);
+crasher({ ...a });
 
 console.log(a);
