@@ -69,4 +69,4 @@ function startCoords(n) {
   return [n - 1, Math.ceil(n / 2) - 1];
 }
 
-console.log(genMagicSquare(5));
+console.log(genMagicSquare(2));
