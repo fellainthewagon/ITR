@@ -6,7 +6,7 @@ function copy(n, speedA, speedB) {
   let seconds = bestSpeed;
   let amountOfCopyNeeded = n - 1;
 
-  // performance of both printers
+  // performance of both printers (copy/sec)
   const copiesPerSecond = 1 / speedA + 1 / speedB;
 
   while (amountOfCopyNeeded > 0) {

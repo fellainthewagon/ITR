@@ -26,7 +26,7 @@
 function genMagicSquare(n) {
   const numberOfCells = n * n;
   const matrix = initEmptyMatrix(n);
-  let [row, column] = startPoint(n);
+  let [row, column] = startCoords(n);
 
   let cycle = 1;
 
@@ -49,8 +49,6 @@ function genMagicSquare(n) {
   return matrix;
 }
 
-console.log(genMagicSquare(5));
-
 /**
  *   secondary functions
  */
@@ -67,6 +65,8 @@ function initEmptyMatrix(n) {
   return matrix;
 }
 
-function startPoint(n) {
+function startCoords(n) {
   return [n - 1, Math.ceil(n / 2) - 1];
 }
+
+console.log(genMagicSquare(5));
