@@ -1,29 +1,31 @@
-//          1   2   3   4   5
-
-//    1   [ 11, 18, 25, 02, 09]
-//    2   [ 10, 12, 19, 21, 03]
-//    3   [ 04, 06, 13, 20, 22]
-//    4   [ 23, 05, 07, 14, 16]
-//    5   [ 17, 24, 01, 08, 15]
-
-// ----|---------------|----------------|----------------|----------------|----------------|
-// NUM | 1  2  3  4  5 | 6  7  8  9  10 | 11 12 13 14 15 | 16 17 18 19 20 | 21 22 23 24 25 |
-// ----|---------------|----------------|----------------|----------------|----------------|
-// ROW | 5  1  2  3  4 | 3  4  5  1  2  | 1  2  3  4  5  | 4  5  1  2  3  | 2  3  4  5  1  |
-// ----|---------------|----------------|----------------|----------------|----------------|
-// COL | 3  4  5  1  2 | 2  3  4  5  1  | 1  2  3  4  5  | 5  1  2  3  4  | 4  5  1  2  3  |
-// ----|---------------|----------------|----------------|----------------|----------------|
-
-// pseudocode:
-
-// start => (R = N && C = N/2 (ceil))
-// step => (R += 1 && C += 1);
-// cycle = N(5);
-// reset => (R -= 1 && C += 0);
-
-/* --------------------------------------------------------------------------------------  */
+/**
+ *  For natural numbers only!
+ */
 
 function genMagicSquare(n) {
+  if (n === 2) {
+    return "There is no Magic Square for this number.";
+  }
+  if (n % 2 === 1) {
+    return oddMagicSquare(n);
+  }
+  if (n % 2 === 0 && (n / 2) % 2 === 0) {
+    return doublyEvenMagicSquare(n);
+  }
+  if ((n / 2) % 2 === 1) {
+    return singlyEvenMagicSquare(n);
+  }
+}
+
+for (let i = 1; i <= 10; i++) {
+  console.table(genMagicSquare(i));
+}
+
+/**
+ * *****************************************************
+ */
+
+function oddMagicSquare(n) {
   const numberOfCells = n * n;
   const matrix = initEmptyMatrix(n);
   let [row, column] = startCoords(n);
@@ -49,9 +51,118 @@ function genMagicSquare(n) {
   return matrix;
 }
 
-/**
- *   secondary functions
- */
+/* ******************************************************* */
+
+function doublyEvenMagicSquare(n) {
+  const matrix = initEmptyMatrix(n);
+  const quarter = n / 4;
+  const threeQuarter = quarter * 3;
+  let num = 1;
+  let rev = n * n;
+
+  for (let row = 0; row < quarter; row++) {
+    for (let col = 0; col < n; col++) {
+      if (col < quarter || col >= threeQuarter) {
+        matrix[row][col] = rev;
+        rev--;
+        num++;
+      } else {
+        matrix[row][col] = num;
+        num++;
+        rev--;
+      }
+    }
+  }
+
+  for (let row = quarter; row < threeQuarter; row++) {
+    for (let col = 0; col < n; col++) {
+      if (col < quarter || col >= threeQuarter) {
+        matrix[row][col] = num;
+        rev--;
+        num++;
+      } else {
+        matrix[row][col] = rev;
+        num++;
+        rev--;
+      }
+    }
+  }
+
+  for (let row = threeQuarter; row < n; row++) {
+    for (let col = 0; col < n; col++) {
+      if (col < quarter || col >= threeQuarter) {
+        matrix[row][col] = rev;
+        rev--;
+        num++;
+      } else {
+        matrix[row][col] = num;
+        num++;
+        rev--;
+      }
+    }
+  }
+
+  return matrix;
+}
+
+/* ******************************************************* */
+
+function singlyEvenMagicSquare(n) {
+  const mid = n / 2;
+  const tempSquare = oddMagicSquare(mid);
+  let matrix = initEmptyMatrix(n);
+  const incrementor = mid * mid;
+  let firstPoint = Math.floor(n / 4);
+  const step = tempSquare.length;
+
+  // fill matrix with basic values
+  for (let row = 0; row < mid; row++) {
+    for (let col = 0; col < mid; col++) {
+      matrix[row][col] = tempSquare[row][col];
+    }
+  }
+  for (let row = mid; row < n; row++) {
+    for (let col = mid; col < n; col++) {
+      matrix[row][col] = matrix[row - mid][col - mid] + incrementor;
+    }
+  }
+  for (let row = 0; row < mid; row++) {
+    for (let col = mid; col < n; col++) {
+      matrix[row][col] = matrix[row + mid][col] + incrementor;
+    }
+  }
+  for (let row = mid; row < n; row++) {
+    for (let col = 0; col < mid; col++) {
+      matrix[row][col] = matrix[row - mid][col + mid] + incrementor;
+    }
+  }
+
+  // after init basic matrix we should transform it
+  for (let row = 0; row < step; row++) {
+    for (let col = 0; col < firstPoint; col++) {
+      if (row === firstPoint && col === 0) {
+        matrix = castling(matrix, step, row, col, firstPoint);
+        continue;
+      }
+      matrix = castling(matrix, step, row, col);
+    }
+  }
+
+  // return if n = 6
+  if (n < 7) return matrix;
+
+  let q = n === 10 ? 1 : (n - 10) / 4 + 1;
+  for (let row = 0; row < step; row++) {
+    for (let col = n - q; col < n; col++) {
+      matrix = castling(matrix, step, row, col);
+    }
+  }
+
+  return matrix;
+}
+
+/* ******************************************************* */
+// secondary functions
 
 function initEmptyMatrix(n) {
   const matrix = [];
@@ -69,4 +180,9 @@ function startCoords(n) {
   return [n - 1, Math.ceil(n / 2) - 1];
 }
 
-console.log(genMagicSquare(2));
+function castling(matrix, step, row, col, firstPoint = 0) {
+  const temp = matrix[row][col + firstPoint];
+  matrix[row][col + firstPoint] = matrix[row + step][col + firstPoint];
+  matrix[row + step][col + firstPoint] = temp;
+  return matrix;
+}
