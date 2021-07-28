@@ -1,10 +1,10 @@
 function generateVolumes(pages, k) {
-  // if only 1 tome
-  if (k === 1) {
-    return pages.reduce((sum, num) => sum + num, 0);
-  }
-  // first candidate is average number of pages per 1 tome
   const amountOfPages = pages.reduce((sum, num) => sum + num, 0);
+
+  // if only 1 tome
+  if (k === 1) return amountOfPages;
+
+  // first candidate is average number of pages per 1 tome
   let candidate = Math.ceil(amountOfPages / k);
 
   let array = pages;
@@ -37,7 +37,7 @@ function generateVolumes(pages, k) {
     candidate++;
   }
   // find max value
-  return novel.reduce((acc, num) => (acc < num ? (acc = num) : acc), 0);
+  return Math.max(...novel);
 }
 
 console.log(generateVolumes([1, 2, 1, 1], 3));

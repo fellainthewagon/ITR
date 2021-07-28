@@ -62,43 +62,25 @@ function doublyEvenMagicSquare(n) {
 
   for (let row = 0; row < quarter; row++) {
     for (let col = 0; col < n; col++) {
-      if (col < quarter || col >= threeQuarter) {
-        matrix[row][col] = rev;
-        rev--;
-        num++;
-      } else {
-        matrix[row][col] = num;
-        num++;
-        rev--;
-      }
+      matrix[row][col] = col < quarter || col >= threeQuarter ? rev : num;
+      rev--;
+      num++;
     }
   }
 
   for (let row = quarter; row < threeQuarter; row++) {
     for (let col = 0; col < n; col++) {
-      if (col < quarter || col >= threeQuarter) {
-        matrix[row][col] = num;
-        rev--;
-        num++;
-      } else {
-        matrix[row][col] = rev;
-        num++;
-        rev--;
-      }
+      matrix[row][col] = col < quarter || col >= threeQuarter ? num : rev;
+      rev--;
+      num++;
     }
   }
 
   for (let row = threeQuarter; row < n; row++) {
     for (let col = 0; col < n; col++) {
-      if (col < quarter || col >= threeQuarter) {
-        matrix[row][col] = rev;
-        rev--;
-        num++;
-      } else {
-        matrix[row][col] = num;
-        num++;
-        rev--;
-      }
+      matrix[row][col] = col < quarter || col >= threeQuarter ? rev : num;
+      rev--;
+      num++;
     }
   }
 
@@ -140,11 +122,8 @@ function singlyEvenMagicSquare(n) {
   // after init basic matrix we should transform it
   for (let row = 0; row < step; row++) {
     for (let col = 0; col < firstPoint; col++) {
-      if (row === firstPoint && col === 0) {
-        matrix = castling(matrix, step, row, col, firstPoint);
-        continue;
-      }
-      matrix = castling(matrix, step, row, col);
+      const point = row === firstPoint && col === 0 ? firstPoint : 0;
+      matrix = castling(matrix, step, row, col, point);
     }
   }
 
@@ -180,9 +159,9 @@ function startCoords(n) {
   return [n - 1, Math.ceil(n / 2) - 1];
 }
 
-function castling(matrix, step, row, col, firstPoint = 0) {
-  const temp = matrix[row][col + firstPoint];
-  matrix[row][col + firstPoint] = matrix[row + step][col + firstPoint];
-  matrix[row + step][col + firstPoint] = temp;
+function castling(matrix, step, row, col, point = 0) {
+  const temp = matrix[row][col + point];
+  matrix[row][col + point] = matrix[row + step][col + point];
+  matrix[row + step][col + point] = temp;
   return matrix;
 }
