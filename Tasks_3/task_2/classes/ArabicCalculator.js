@@ -2,8 +2,12 @@ const Calculator = require("./Calculator");
 
 class ArabicCalculator extends Calculator {
   calc(a, b, operator) {
-    this.operator = operator;
-    return this.getResult(a, b);
+    try {
+      this.operator = operator;
+      return this.getResult(a, b);
+    } catch (error) {
+      return { error: error.message, result: error.result };
+    }
   }
 }
 
