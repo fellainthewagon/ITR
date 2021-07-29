@@ -9,11 +9,11 @@ class NonRepeatNumber extends StringFormatter {
     this.collection.clear();
     return inputString
       .split(" ")
-      .map((part) => (isNaN(parseFloat(part)) ? part : this.#ifNumber(part)))
+      .map((part) => (isNaN(parseFloat(part)) ? part : this.#numHandler(part)))
       .join(" ");
   }
 
-  #ifNumber(part) {
+  #numHandler(part) {
     // number without .,?!
     const num = parseFloat(part);
 

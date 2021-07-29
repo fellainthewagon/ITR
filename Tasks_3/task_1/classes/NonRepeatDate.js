@@ -18,11 +18,11 @@ class NonRepeatDate extends StringFormatter {
     this.collection.clear();
     return inputString
       .split(" ")
-      .map((part) => (part.match(this.regex) ? this.#ifDate(part) : part))
+      .map((part) => (part.match(this.regex) ? this.#dateHandler(part) : part))
       .join(" ");
   }
 
-  #ifDate(part) {
+  #dateHandler(part) {
     // date without .,?!
     const date = isNaN(part[part.length - 1])
       ? part.substring(0, part.length - 1)

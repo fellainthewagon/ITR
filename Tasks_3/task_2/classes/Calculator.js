@@ -34,6 +34,6 @@ module.exports = class Calculator {
     return a / b;
   }
   #isOperator() {
-    return ["/", "*", "-", "+"].indexOf(this.operator) !== -1 ? true : false;
+    return ["/", "*", "-", "+"].indexOf(this.operator) !== -1;
   }
 };
