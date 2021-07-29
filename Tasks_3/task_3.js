@@ -1,8 +1,8 @@
 const axios = require("axios");
 
 class Users {
-  constructor(N = 1) {
-    this.amount = N;
+  constructor(n = 1) {
+    this.amount = n;
   }
 
   async getUsers() {
